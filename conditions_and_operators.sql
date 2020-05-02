@@ -166,3 +166,40 @@ SELECT * FROM employees WHERE employees.salary BETWEEN 3000 AND 3500;
 USE onlineshop;
 
 SELECT * FROM items WHERE items.price BETWEEN 100 AND 1000;
+
+-- Numeric operators include addition (+), subtraction (-) multiplication(*), and division(/)
+-- It can be used in the SQL statements or in combination with column values
+
+SELECT 10 + 15;
+
+SELECT 10 - 15;
+
+SELECT 10 * 15;
+
+SELECT 10 / 15;
+
+USE school;
+
+SELECT students.firstname, students.age + 10 FROM students;
+
+USE company;
+
+SELECT *, employees.salary + 50 FROM employees;
+
+
+-- Concatenation operator
+-- the concatenation operator is the only operator which is used only for strings
+-- the concatenation operator joins 2 strings together
+-- in MYSQL the 2 string are joined together using the CONCAT function or || double pipe
+
+USE school;
+
+SELECT CONCAT (students.firstname, ' ',students.lastname) AS fullname FROM students; 
+
+-- Temporal operator
+-- intervals are used while using date and time in SQL
+-- for exmaple, A week means "today + 7 days". Here, the plus sign is used in temporal calculation and called as temporal operator
+
+SELECT CURRENT_DATE + INTERVAL 7 DAY AS week; 
+
+SELECT CURRENT_DATE + INTERVAL 1 DAY AS tomorrow;
