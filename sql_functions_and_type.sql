@@ -191,3 +191,123 @@ SELECT 10.456789, ROUND(10.456789, 2)
 **/
 
 SELECT 10.456789, FORMAT(10.456789, 2)
+
+
+-- SQL SUBSTRING function
+-- the SUBSTRING function extracts characters from the given string data
+-- th SUBSTRING function only works on string columns
+/**
+example:
+SELECT SUBSTRING (columnname FROM start FOR length) FROM tablename;
+FROM start: starting position
+FOR length: returns the number of characters specified
+**/
+
+SELECT SUBSTRING(firstname FROM 1 FOR 3) FROM students;
+
+SELECT SUBSTRING(firstname FROM 2 FOR 2) FROM students;
+
+
+-- SQL COALESCE function
+-- SQL COALESCE function return the first non-NULL value from the given list
+-- if there are non-null values the COALESCE function returns NULL
+/**
+example:
+SELECT COALESCE(column1, column2, column3) FROM tablename
+**/
+
+SELECT COALESCE(NULL, 2, 3) -- in this case will return 2 is the first non-null value
+
+SELECT COALESCE(NULL, NULL, 3)
+
+
+-- SQL CHAR_LEGNTH function
+-- the CHAR_LEGNTH function returns the length of the given string value
+-- the CHAR_LEGNTH function function work on string as well as numeric values
+/**
+example:
+SELECT CHAR_LEGNTH(columnname) FROM tablename;
+**/
+
+SELECT firstname, CHAR_LENGTH(firstname) 'Character Length' FROM students;
+
+SELECT studentid, CHAR_LENGTH(studentid) 'Character Length' FROM students;
+
+
+-- SQL CAST function
+-- the CAST function is used to change the data type of a value
+-- the changing of one data type to another data type is known as casting
+-- the casting is very useful while importing or exporting data.
+/**
+example:
+SELECT CAST(columnname AS datatype) FROM tablename;
+**/
+
+SELECT CAST(10.56789 AS SIGNED) -- casting to integer this select will return 11
+
+SELECT CAST(10 AS DECIMAL(4,2)) -- casting to decinal this select will return 10.00
+
+SELECT CAST(10.56789 AS CHAR(4)) -- casting to character and will take 4 characters this select will return 10.5
+
+
+-- SQL CASE function
+-- the CASE function returns a value or NULL by evaluating series of conditions
+-- the CASE function conditions are made up of keywords WHEN, THEN, ELSE and END
+-- the CASE function wokrs similiar to if else condition in programming language
+-- the case function evaluates string as well as numeric values
+-- in Simple CASE an expression is compared to static values while in Searched CASE an expression is compared to multiple logical conditions
+
+/**
+example:
+SELECT column1, column2, CASE
+WHEN (column3 condition) THEN result1
+WHEN (column3 condition) THEN result2
+WHEN (column3 condition) THEN result3
+ELSE noresult
+END;
+**/
+
+SELECT CASE(6)
+when 1 then 'One'
+when 2 then 'Two'
+when 3 then 'Three'
+when 4 then 'Four'
+when 5 then 'Five'
+ELSE 'No match'
+END;
+
+SELECT firstname, age, CASE
+WHEN (age = 5) THEN 'Five'
+WHEN (age = 6) THEN 'Six'
+WHEN (age = 7) THEN 'Seven'
+ELSE NULL
+END
+AS  'Age as text'
+FROM students;
+
+
+-- SQL NULLIF Function
+-- the NULLIF Function returns NULL value, if the 2 parameter values are equal
+-- if the 2 parameter values are not equal, the NULLIF function returns first argument
+-- the NULLIF Function evaluates string as well as numeric values
+/**
+exmaple
+SELECT NULLIF(expression1, expression2) FROM tablename;
+**/
+
+SELECT NULLIF(10, 20) -- this will return 10 first parameter due to the arguments are not equals
+
+SELECT NULLIF(20, 10) -- this will return 20 first parameter due to the arguments are not equals
+
+SELECT NULLIF(20, 20) -- this will return NULL due to both parameters are equals
+
+SELECT NULLIF('abc', 'xyz')
+
+SELECT NULLIF('abc', 'abc')
+
+USE joins;
+
+SELECT table1.column1, table2.column2, NULLIF(table1.column1, table2.column2) 
+FROM table1 LEFT OUTER JOIN table2 ON table1.column1 = table2.column2;
+
+SELECT LEN('John');
