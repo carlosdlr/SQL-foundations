@@ -129,3 +129,109 @@ ALTER TABLE subjects ADD UNIQUE (title);
 DESCRIBE subjects;
 
 ALTER TABLE subjects DROP INDEX title; -- to remove the unique constraint from the title column
+
+
+-- Primary key constraint
+-- the Primary key constraint is useful to restrict storing of duplicate data row values in a given column
+-- the Primary key constraint is similar to unique constraint but unlike UNIQUE constraint there can be only one primary key for table
+-- the Primary key automatically sets UNIQUE constraint for that table column
+-- the Primary key column cannot contain null values
+-- the Primary key can be defined while creating a new database table or can be added by using ALTER TABLE statement
+/**
+example:
+ALTER TABLE tablename ADD PRIMARY KEY (column1);
+ALTER TABLE tablename DROP PRIMARY KEY column1;
+**/
+
+
+-- FOREIGN key constraint
+-- a FOREIGN key in a table always points to a PRIMARY KEY in another table
+-- the FOREIGN key constraint terminates the action that can destroy the links between relational tables
+-- the FOREIGN key constraint also restrict adding invalid data to the foreign column because the foreign key columns must be similar to the the linked primary key values
+-- the FOREIGN key can be defined while creating a new database table or can be added by using ALTER TABLE statement
+/**
+examples:
+ALTER TABLE tablename1 ADD CONSTRAINT fk_name FOREIGN KEY (column1) REFERENCES tablename2(column1);
+ALTER TABLE tablename1 DROP FOREING KEY fk_name;
+**/ 
+
+USE school;
+
+ALTER TABLE teachers ADD COLUMN subjectid INT(11) NOT NULL DEFAULT 1;
+
+DESCRIBE teachers;
+
+ALTER TABLE teachers ADD CONSTRAINT fk_subjectid FOREIGN KEY (subjectid) REFERENCES subjects (subjectid);
+
+DESCRIBE teachers;
+
+UPDATE teachers SET subjectid = 99 WHERE teacherid = 1; -- will throw an error due the 99 subject id doesn't exists in the table subjects
+
+UPDATE teachers SET subjectid = 3 WHERE teacherid = 1;  -- will work due to subject id 3 exists in the table subjects
+
+ALTER TABLE teachers DROP FOREIGN KEY fk_subjectid; -- first delete the foreign key
+ALTER TABLE teachers DROP COLUMN subjectid; -- after the column
+
+
+-- CHECK constraint
+-- the CHECK constraint is used to control the range value that can be store in a table column
+-- a table column with CHECK constraint defined will save only specific values in the column
+-- the CHECK constraint can be applied to a single or multiple columns
+-- the CHECK constraint can be defined while creating a new table or using ALTER TABLE	statement for an existing one.
+/**
+example:
+CREATE TABLE tablename(
+	column1 atatype,
+	column2 datatype,
+	CHECK(column1 > 0)
+);
+
+ALTER TABLE tablename ADD CONSTRAINT chk_column1 CHECK (column1 > 0);
+**/
+
+
+
+-- DEFAULT constraint
+-- the DEFAULT constraint is used to set a default value for a data column
+-- if the value for the column in data row is not defined, the default value will be added to the data row column.
+-- the DEFAULT constraint can be defined while creating a new table or using ALTER TABLE statement for existing table.
+/**
+example:
+CREATE TABLE tablename (
+	column1 datatype,
+	column2 datatype DEFAULT 'novalue'
+);
+
+ALTER TABLE tablename ALTER column1 SET DEFAULT 'novalue';
+**/
+
+ALTER TABLE students ALTER age SET DEFAULT 5;
+INSERT INTO students (firstname, lastname, class) VALUES ('john', 'wick', 'First'); -- will insert a new record with age 5 due to we add the default constraint
+
+
+
+
+-- AUTO INCREMENT or SEQUENCE
+-- the AUTO_INCREMENT attribute generates and save unique number every time a new data row is inserted into a table
+-- for PRIMARY KEY column we always require a unique number to be stored. Instead of creating a unique number manually, AUTO_INCREMENT or SEQUENCE attribute is useful
+-- the AUTO INCREMENT or SEQUENCE are only used with numeric data columns 
+-- in MYSQL default AUTO_INCREMENT generates new value by adding 1, for each new record
+/**
+examples:
+MYSQL
+CREATE TABLE tablename (column1 datatype NOT NULL PRIMARY KEY AUTO_INCREMENT, column2 datatype);
+
+SQL Server
+CREATE TABLE tablename (column1 datatype IDENTITY(1,1) PRIMARY KEY, column2 datatype);
+
+MS ACCESS
+CREATE TABLE tablename (column1 datatype PRIMARY KEY AUTO_INCREMENT, column2 datatype);
+
+Oracle
+CREATE SEQUENCE column1
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 50
+
+**/ 
