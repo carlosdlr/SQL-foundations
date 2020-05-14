@@ -67,3 +67,60 @@ UPDATE clients SET balance = (balance - 100) WHERE cid = 1;
 -- creates the record in the transaction details table
 INSERT INTO tdetails (tmessage, tdate) VALUES('John sent $100 to mike', NOW());
 ROLLBACK;
+
+
+-- SAVEPOINT Statement
+-- SAVEPOINT statement save a transaction temporaly
+-- Tehre can be multiple SAVEPOINT in single transaction
+-- Rollback to a specific SAVEPOINT
+-- No SAVEPOINT rollback after COMMIT
+-- Create a savepoint and rollback to a savepoint
+-- SAVEPOINT SAVEPOINTNAME;
+-- ROLLBACK TO SAVEPOINTNAME
+
+USE bank;
+
+UPDATE clients SET balance = 1000 WHERE cid = 1; -- putting the balances accounts in the initial state before the example
+UPDATE clients SET balance = 100 WHERE cid = 2;
+
+-- let's remove the transactions
+TRUNCATE tdetails;
+
+
+START TRANSACTION;
+
+UPDATE clients SET balance = (balance - 100) WHERE cid = 1;
+UPDATE clients SET balance = (balance + 100) WHERE cid = 2;
+INSERT INTO tdetails (tmessage, tdate) VALUES('John sent $100 to mike', NOW());
+
+SAVEPOINT SP1;
+
+UPDATE clients SET balance = (balance - 100) WHERE cid = 1;
+INSERT INTO tdetails (tmessage, tdate) VALUES('Second John sent $100 to mike', NOW());
+
+SAVEPOINT SP2;
+
+UPDATE clients SET balance = (balance - 100) WHERE cid = 1;
+INSERT INTO tdetails (tmessage, tdate) VALUES('Third John sent $100 to mike', NOW());
+
+SAVEPOINT SP3;
+
+ROLLBACK TO SP1; -- rollback to the first complete transaction
+
+
+-- SET autocommit
+-- enalbes the default autocommit mode for the current session
+-- Autocommit=(0/1) 0 = disable 1 = enable
+-- By default in MYSQL autocommit is enabled
+-- DDL: if autocommit enable, changes are permanet
+-- Transaction: autocommit turns off temporarily
+
+USE school;
+
+UPDATE students SET age = 7 WHERE studentid = 1; -- save the changes permanently autocommit by default enabled
+
+SET autocommit=0; --disable 
+
+
+UPDATE students SET age = 5 WHERE studentid = 1;  -- then changes are just in the current session due to autocommit disabled
+																  -- if we logout and login again the changes will not saved
